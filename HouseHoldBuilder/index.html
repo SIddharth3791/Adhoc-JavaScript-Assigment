@@ -8,7 +8,7 @@
                 font-family: monospace;
                 border: 1px solid black;
                 padding: 10px;
-                display: none;
+                
             }
         </style>
     </head>
@@ -51,6 +51,11 @@
         <pre class="debug"></pre>
         <script>
 
+			
+			var form = document.querySelector('form');
+            var addBtn = document.getElementsByClassName('add')[0];
+			addBtn.addEventListener('click', addMember)
+			
             function removeError () {
                 var error = document.getElementById('error');
                 if (error) {
@@ -71,15 +76,18 @@
 			
 			
         function validateForm(event) {
+			window.console.log("Inside Validateform");
                 event.preventDefault();
                 var ageOfMember = document.getElementsByName('age')[0].value;
                 var relationOfMember = document.getElementsByName('rel')[0].value;
                 if (familyMembers.length) 
 				{
+					
                     var debug = document.getElementsByClassName('debug')[0];
                     var paragraph = document.createElement('p');
                     var household = document.getElementsByClassName('household')[0];
                     paragraph.innerHTML = JSON.stringify(familyMembers, null, 4);
+					
                     removeAllChildren(debug);
                     removeAllChildren(household);
                     debug.appendChild(paragraph);
@@ -96,14 +104,16 @@
                 } 
             }
 
-            function removeMember(event) {
+            function removeFamilyMember(event) {
                 var id = parseInt(event.target.value)   ;
                 var member = event.target.parentNode;
                 var parent = member.parentNode;
                 parent.removeChild(member);
-                for (var i = 0; i < householdMembers.length; i++) {
-                    if (familyMembers[i].id === id) {
-                        familyMembers.splice(i, 1);
+                for (var i = 0; i < familyMembers.length; i++) 
+				{
+                    if (familyMembers[i].id == id) 
+					{
+                        	familyMembers.splice(i, 1);
                     }
                 }
             }
@@ -126,23 +136,29 @@
 								removeError();
                     			var household = document.getElementsByClassName('household')[0];
 								var listItem = document.createElement('li');
-								var checkbox = document.createElement('input');
-								checkbox.type = 'checkbox';
-								checkbox.value = id;
+								var l1 = document.createElement("p");
+								var l2 = document.createElement("p");
+								var l3 = document.createElement("p");
+								var button = document.createElement('input');
+								button.type = 'button';
+								button.value = "Click To Remove";
 
-								listItem.innerHTML = '	Age: ' + ageOfMember + 
-													 '  Relationship: ' + relationOfMember+ 
-													 '  Smoker?: ' + smoker + 
-													 ' <strong>Delete?</strong> ';
-								checkbox.addEventListener('click', removeMember);
-								listItem.appendChild(checkbox);
+								l1.innerHTML = "Age Of Family Member = "+'<strong>'+ageOfMember+'</strong>';
+								l2.innerHTML = "Relation to Family Memeber = "+'<strong>'+relationOfMember+'</strong>';
+								l3.innerHTML = "Somker? = "+'<strong>'+smoker+'</strong>';
+								listItem.appendChild(l1);
+								listItem.appendChild(l2);
+								listItem.appendChild(l3);
+								field_area = document.querySelector('.household')
+								field_area.appendChild(listItem);
+
+								button.addEventListener('click', removeFamilyMember);
+								listItem.appendChild(button);
 								household.appendChild(listItem);
-							window.console.log("here i am ");
 								storeMember(ageOfMember, relationOfMember, smoker);
 								//remove After clicking Sumbit
 								document.getElementsByName('age')[0].value = '';
 								document.getElementsByName('rel')[0].value = '';
-						
 					}
 				else
 					{
@@ -150,25 +166,20 @@
 					}
             }
 			
-			
+			var familyMembers = [];
+			var id = 1;
             function storeMember(age, rel, smoker) {
                 var info = {};
+				info['Member ID '] = id++;
                 info['age'] = age;
                 info['rel'] = rel;
                 info['smoker'] = smoker;
-                info['id'] = id++;
+                
                 familyMembers.push(info);
             }
-            var form = document.querySelector('form');
-            var addBtn = document.getElementsByClassName('add')[0];
-            var familyMembers = [];
-            var id = 1;
+
             form.addEventListener('submit', validateForm);
-            addBtn.addEventListener('click', addMember)
-			
-			
-			
-			
+
         </script>
     </body>
 </html>
