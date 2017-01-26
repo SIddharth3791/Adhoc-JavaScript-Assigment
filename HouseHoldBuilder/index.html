@@ -55,26 +55,20 @@
 			var form = document.querySelector('form');
             var addBtn = document.getElementsByClassName('add')[0];
 			addBtn.addEventListener('click', addMember)
-			
-            function removeError () {
-                var error = document.getElementById('error');
-                if (error) {
-					
-                    var parent = error.parentNode;
-                    parent.removeChild(error);
-                }
-            }
+			var familyMembers = [];
+			var id = 1;
+
 			
 
 			
 				
-            function removeAllChildren(node) {
+           function removeAllMember(node) {
                 while (node.hasChildNodes()) {
                     node.removeChild(node.lastChild);
                 }
             }
 			
-			
+		//fnction is called if age or relation is missing.	
         function validateForm(event) {
 			window.console.log("Inside Validateform");
                 event.preventDefault();
@@ -88,8 +82,8 @@
                     var household = document.getElementsByClassName('household')[0];
                     paragraph.innerHTML = JSON.stringify(familyMembers, null, 4);
 					
-                    removeAllChildren(debug);
-                    removeAllChildren(household);
+                   	removeAllMember(debug);
+                   	removeAllMember(household);
                     debug.appendChild(paragraph);
                     familyMembers = [];
                 } 
@@ -104,6 +98,7 @@
                 } 
             }
 
+			//Remove family memeber from Array
             function removeFamilyMember(event) {
                 var id = parseInt(event.target.value)   ;
                 var member = event.target.parentNode;
@@ -119,7 +114,7 @@
             }
 			
 			
-			
+			//Function to validate family memeber abou their age or relationship.
             function addMember(event) {
                 event.preventDefault();
                 var ageOfMember = document.getElementsByName('age')[0].value;
@@ -133,7 +128,7 @@
 				if (ageOfMember > 0 && !!relationOfMember)
 					{
 						
-								removeError();
+								
                     			var household = document.getElementsByClassName('household')[0];
 								var listItem = document.createElement('li');
 								var l1 = document.createElement("p");
@@ -166,8 +161,7 @@
 					}
             }
 			
-			var familyMembers = [];
-			var id = 1;
+			//Function to store family member in Array
             function storeMember(age, rel, smoker) {
                 var info = {};
 				info['Member ID '] = id++;
